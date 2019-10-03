@@ -6,9 +6,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  
+  <meta name="author" content="Ismael Santiago Estévez">
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Informacion - ISMAEL</title>
+  <title>Informacion - Tutecnoinfor</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -36,7 +36,7 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-        <a href=".." class="icon icon-home"> ISMAEL</a>
+        <a href=".." class="icon icon-home"> Tutecnoinfor</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
@@ -63,7 +63,21 @@
     <a class="current" href="./">Informacion</a>
     <ul class="subnav">
             
-    <li class="toctree-l2"><a href="#informacion-sobre-la-pagina-tutecnoinfor">Información sobre la página Tutecnoinfor</a></li>
+    <li class="toctree-l2"><a href="#informacion-sobre-instalacion-y-configuracion-del-servidor-debian">Información sobre Instalación y configuración del servidor Debian</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#introduccion">INTRODUCCIÓN</a></li>
+        
+            <li><a class="toctree-l3" href="#instalacion-del-servidor">INSTALACIÓN DEL SERVIDOR</a></li>
+        
+            <li><a class="toctree-l3" href="#configuracion-de-red">CONFIGURACIÓN DE RED</a></li>
+        
+            <li><a class="toctree-l3" href="#configuracion-de-nombres">CONFIGURACIÓN DE NOMBRES</a></li>
+        
+            <li><a class="toctree-l3" href="#configuracion-de-la-interfaces-de-red">CONFIGURACIÓN DE LA INTERFACES DE RED</a></li>
+        
+        </ul>
     
 
     </ul>
@@ -79,7 +93,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="..">ISMAEL</a>
+        <a href="..">Tutecnoinfor</a>
       </nav>
 
       
@@ -101,7 +115,96 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="informacion-sobre-la-pagina-tutecnoinfor">Información sobre la página Tutecnoinfor</h1>
+                <h1 id="informacion-sobre-instalacion-y-configuracion-del-servidor-debian">Información sobre Instalación y configuración del servidor Debian</h1>
+<h2 id="introduccion">INTRODUCCIÓN</h2>
+<p>Buenas, en mi instituto I.E.S Cervantes nos han propuesto hacer un proyecto. El proyecto se trata de montar un servidor, para ello tendremos disponible el dominio “cervantes.org”. Tendremos que empezar por la instalación y configuración del servidor.</p>
+<h2 id="instalacion-del-servidor">INSTALACIÓN DEL SERVIDOR</h2>
+<p>Vamos a empezar con la instalación del servidor para ello necesitaremos una imagen de debian montado en un CD y tendremos que seguir los siguientes pasos para instalar el sistema:</p>
+<ol>
+<li>Comenzamos la instalación y en el menú escogeremos la opción de install.</li>
+<li>Configuración del idioma. Escogeremos nuestro país y región.</li>
+<li>La siguiente configuración es el nombre de la máquina y nombre del dominio:</li>
+<li>Nombre de la maquina: quijote</li>
+<li>Nombre del dominio: cervantes.org</li>
+<li>Configuración del nombre y contraseñas: Primero nos pedirá la contraseña del root, después tendremos que introducir el nombre de la maquina y su contraseña.</li>
+<li>Configuración del particionado del disco: Esta opción la podremos hacer de distintas formas, para que haga el particionado guiado o para particionarlos nosotros mismos escogemos la opción que queramos en mi caso escogeré la opción de particionamiento  guiado.</li>
+<li>Configuración del gestor de paquetes: En este paso escogemos el gestor de paquetes de españa con la dirección ftp.es.debian.org.
+Por último instalamos el grub.</li>
+</ol>
+<h2 id="configuracion-de-red">CONFIGURACIÓN DE RED</h2>
+<p>En este apartado vamos a explicar la configuración que vamos a tener en nuestro servidor.</p>
+<h2 id="configuracion-de-nombres">CONFIGURACIÓN DE NOMBRES</h2>
+<p>Para ver si en la instalación hemos introducido bien el nombre de nuestro servidor lo podremos ver desde la terminal con el comando:</p>
+<pre><code>hostname -f
+</code></pre>
+
+<pre><code>quijote.cervantes.org
+</code></pre>
+
+<p>Y para ver la dirección local de la máquina entraremos al fichero de configuración a través del fichero:</p>
+<pre><code>/etc/hosts
+</code></pre>
+
+<pre><code>127.0.1.1 quijote.cervantes.org quijote
+</code></pre>
+
+<p>Para modificar el nombre podremos entrar como root en:</p>
+<pre><code>/etc/hostname
+</code></pre>
+
+<h2 id="configuracion-de-la-interfaces-de-red">CONFIGURACIÓN DE LA INTERFACES DE RED</h2>
+<p>Nuestro servidor tendrá dos tarjetas de red una de ellas la eth0 que sera la que se conecte a Internet dinamicamente y la otra tarjeta de red que sera la eth1, esta tarjeta la utilizaremos para nuestra red privada y tendremos que configurar las dos tarjetas.</p>
+<p>Para dejar configurada las dos tarjeta de red tendremos que entrar como root en:</p>
+<pre><code>/etc/network/interfaces
+</code></pre>
+
+<p>Una vez dentro tendremos que dejar el fichero de la siguiente manera:</p>
+<pre><code>auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+auto eth1
+iface eth1 inet static
+address 192.168.1.254
+netmask 255.255.255.0
+network 192.168.1.0
+broadcast 192.168.1.255
+</code></pre>
+
+<p>Salimos del fichero guardando y tendremos que reiniciar las tarjetas de red con el comando systemctl restart networking. Una vez reiniciada ejecutaremos el comando como root:</p>
+<pre><code>ifconfig
+</code></pre>
+
+<p>Comprobamos que esta todo correcto.</p>
+<pre><code>eth0 Link encap:Ethernet HWaddr 08:00:27:d8:96:ed 
+     inet addr:172.22.0.166 Bcast:172.22.255.255 Mask:255.255.0.0
+     inet6 addr: fe80::a00:27ff:fed8:96ed/64 Scope:Link
+     UP BROADCAST RUNNING MULTICAST MTU:1500 Metric:1
+     RX packets:650 errors:0 dropped:0 overruns:0 frame:0
+     TX packets:133 errors:0 dropped:0 overruns:0 carrier:0
+     collisions:0 txqueuelen:1000 
+     RX bytes:63761 (62.2 KiB) TX bytes:16941 (16.5 KiB)
+
+eth1 Link encap:Ethernet HWaddr 08:00:27:1d:1a:f6 
+     inet addr:192.168.1.254 Bcast:192.168.0.255 Mask:255.255.255.0
+     inet6 addr: fe80::a00:27ff:fe1d:1af6/64 Scope:Link
+     UP BROADCAST RUNNING MULTICAST MTU:1500 Metric:1
+     RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+     TX packets:65 errors:0 dropped:0 overruns:0 carrier:0
+     collisions:0 txqueuelen:1000 
+     RX bytes:0 (0.0 B) TX bytes:8932 (8.7 KiB)
+
+lo Link encap:Local Loopback 
+   inet addr:127.0.0.1 Mask:255.0.0.0
+   inet6 addr: ::1/128 Scope:Host
+   UP LOOPBACK RUNNING MTU:65536 Metric:1
+   RX packets:25 errors:0 dropped:0 overruns:0 frame:0
+   TX packets:25 errors:0 dropped:0 overruns:0 carrier:0
+   collisions:0 txqueuelen:0 
+   RX bytes:2939 (2.8 KiB) TX bytes:2939 (2.8 KiB)
+</code></pre>
               
             </div>
           </div>
